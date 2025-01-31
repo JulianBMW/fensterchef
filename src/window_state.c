@@ -151,9 +151,13 @@ static void configure_popup_size(Window *window)
                     (uint32_t) window->size_hints.max_height);
         }
 
+        window->popup_x = x;
+        window->popup_y = y;
         window->popup_width = width;
         window->popup_height = height;
     } else {
+        x = window->popup_x;
+        y = window->popup_y;
         width = window->popup_width;
         height = window->popup_width;
     }

@@ -281,6 +281,7 @@ void log_event(xcb_generic_event_t *event)
         break;
 
     case XCB_GE_GENERIC:
+        gen = (xcb_ge_generic_event_t*) event;
         fprintf(g_log_file, "sequence=%" PRIu16 ", length=%" PRIu32,
                 gen->sequence, gen->length);
         break;
@@ -288,10 +289,19 @@ void log_event(xcb_generic_event_t *event)
     fputs(")\n", g_log_file);
 }
 
-/* Log an xcb error to the log file. */
-void log_error(xcb_generic_error_t *error)
+/* Log an xcb error to the log file with additional output formatting and new
+ * line.
+ */
+void log_error(xcb_generic_error_t *error, const char *fmt, ...)
 {
     const char *error_label;
+    va_list l;
+
+    ERR("");
+
+    va_start(l, fmt);
+    vfprintf(g_log_file, fmt, l);
+    va_end(l);
 
     error_label = xcb_event_get_error_label(error->error_code);
     if (error_label != NULL) {
@@ -299,7 +309,7 @@ void log_error(xcb_generic_error_t *error)
     } else {
         fprintf(g_log_file, "Unknown X11 error: ");
     }
-    fprintf(g_log_file, "(code=%d, sequence=%d, major=%d, minor=%d",
+    fprintf(g_log_file, "(code=%d, sequence=%d, major=%d, minor=%d)\n",
             error->error_code, error->sequence, error->major_code,
             error->minor_code);
 }

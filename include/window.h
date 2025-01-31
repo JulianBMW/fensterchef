@@ -49,7 +49,9 @@ typedef struct window {
     uint32_t width;
     uint32_t height;
 
-    /* size when the window was in popup state */
+    /* position and size when the window was in popup state */
+    int32_t popup_x;
+    int32_t popup_y;
     uint32_t popup_width;
     uint32_t popup_height;
 
